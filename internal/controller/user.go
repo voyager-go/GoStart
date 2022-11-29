@@ -1,8 +1,12 @@
 package controller
 
 import (
+	v1 "GoStart/api/v1"
+	"GoStart/internal/consts/e"
 	"GoStart/internal/pkg/response"
+	"GoStart/internal/pkg/validator_trans"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type cUser struct {
@@ -22,9 +26,21 @@ func (cUser) Show(ctx *gin.Context) {
 }
 
 func (cUser) Create(ctx *gin.Context) {
+	var (
+		req v1.UserCreateReq
+	)
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			r.Fail(ctx, e.RequestParamsError, err.Error())
+			return
+		}
+		r.Fail(ctx, e.RequestParamsError, validator_trans.Translate(errs)[0])
+		return
+	}
 	r.SuccessWithData(ctx, struct {
 		UserName string
 	}{
-		UserName: ctx.PostForm("user_name"),
+		UserName: req.UserName,
 	})
 }
