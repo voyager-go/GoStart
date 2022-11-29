@@ -11,7 +11,7 @@ import (
 
 var Logger *logrus.Logger
 
-func InitLogger() {
+func NewLogger() {
 	Logger = logrus.New()
 	logCfg := config.Cfg.Log
 	filePath := logCfg.DirPath

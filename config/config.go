@@ -9,8 +9,8 @@ import (
 
 var (
 	ConfEnv string
-	AppPort string
 	Cfg     *Conf
+	AppPort = "8080"
 )
 
 type Conf struct {
@@ -29,7 +29,7 @@ type LogConf struct {
 	DirPath  string `yaml:"dirPath"`
 }
 
-func InitConfig() {
+func NewConfig() {
 	var (
 		configPath = fmt.Sprintf("./config/config.%s.yaml", ConfEnv)
 	)

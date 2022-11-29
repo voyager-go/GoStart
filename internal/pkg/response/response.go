@@ -14,7 +14,7 @@ type Response interface {
 	// Success 请求成功
 	Success(ctx *gin.Context)
 	// Fail 失败请求
-	Fail(ctx *gin.Context, code e.Code)
+	Fail(ctx *gin.Context, code e.Code, message string)
 	// SuccessWithData 请求成功并返回数据
 	SuccessWithData(ctx *gin.Context, data struct{})
 	// FailWithData 请求失败并返回数据
@@ -43,8 +43,11 @@ func (r *R) Success(ctx *gin.Context) {
 	r.DefaultRes(ctx, e.OK, e.CodeMsg(e.OK), nil)
 }
 
-func (r *R) Fail(ctx *gin.Context, code e.Code) {
-	r.DefaultRes(ctx, code, e.CodeMsg(e.Failed), nil)
+func (r *R) Fail(ctx *gin.Context, code e.Code, message string) {
+	if message == "" {
+		message = e.CodeMsg(e.Failed)
+	}
+	r.DefaultRes(ctx, code, message, nil)
 }
 
 func (r *R) SuccessWithData(ctx *gin.Context, data interface{}) {
