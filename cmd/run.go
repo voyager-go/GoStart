@@ -4,6 +4,7 @@ import (
 	"GoStart/config"
 	"GoStart/internal/pkg/log"
 	"GoStart/internal/pkg/response"
+	"GoStart/internal/pkg/validator_trans"
 	"GoStart/internal/router/middleware"
 	"GoStart/internal/router/routes"
 	"github.com/gin-gonic/gin"
@@ -23,14 +24,18 @@ var App = &cli.App{
 		},
 		&cli.StringFlag{
 			Name:        "port",
-			Value:       "8080",
+			Value:       config.AppPort,
 			Usage:       "请选择启动端口",
 			Destination: &config.AppPort,
 		},
 	},
 	Before: func(*cli.Context) error {
-		config.InitConfig()
-		log.InitLogger()
+		// 初始化配置文件
+		config.NewConfig()
+		// 初始化日志追踪
+		log.NewLogger()
+		// 初始化验证器翻译
+		validator_trans.NewTrans()
 		return nil
 	},
 	Action: func(*cli.Context) error {
