@@ -3,10 +3,10 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	v1 "go-start/api/v1"
 	"go-start/internal/consts/e"
 	"go-start/internal/pkg/response"
 	"go-start/internal/pkg/validator_trans"
+	v1 "go-start/internal/request"
 )
 
 type cUser struct {
