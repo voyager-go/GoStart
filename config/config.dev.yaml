@@ -7,6 +7,12 @@ server:
   tokenKey: 'Authorization' # token的键名
   tokenIssuer: 'start-go-api'
   jwtSecret: 'LIXLolf0ZJ8qalcwh5FQi5xrzjJQHLpy'
+redoc:
+  title: "GoStart OpenApi"
+  desc: "生成项目的接口文档信息"
+  docPath: "/api/redoc"
+  specPath: "/api/swagger.json"
+  specFile: "./swagger.json"
 log:
   debug: true
   fileName: 'go-start' # 日志文件名称
@@ -23,4 +29,6 @@ redis:
   password: ''
   dbNum: 0
   loginPrefix: 'start_go_api_login_' # 登录用户存入redis键名的前缀
-task:
+cmd:
+  swagName: '/Users/artist/go/bin/swag'
+  swagArgs: ['init', '--output', '/Users/artist/GolandProjects/go-start/assets/docs']

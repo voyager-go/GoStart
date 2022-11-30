@@ -17,6 +17,17 @@ var (
 	r    = new(response.R)
 )
 
+// @BasePath /api
+
+// Show
+// @Summary 展示用户信息
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /user/show/:uuid [get]
 func (cUser) Show(ctx *gin.Context) {
 	r.SuccessWithData(ctx, struct {
 		UserName string
@@ -25,6 +36,17 @@ func (cUser) Show(ctx *gin.Context) {
 	})
 }
 
+// @BasePath /api
+
+// Create
+// @Summary 创建用户信息
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /user [post]
 func (cUser) Create(ctx *gin.Context) {
 	var (
 		req v1.UserCreateReq

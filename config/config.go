@@ -16,19 +16,11 @@ var (
 type Conf struct {
 	Server ServerConf
 	Log    LogConf
+	Redoc  RedocConf
+	Cmd    CmdConf
 }
 
-type ServerConf struct {
-	Mode string
-	Port string
-}
-
-type LogConf struct {
-	Debug    bool
-	FileName string `yaml:"fileName"`
-	DirPath  string `yaml:"dirPath"`
-}
-
+// NewConfig 初始化配置信息
 func NewConfig() {
 	var (
 		configPath = fmt.Sprintf("./config/config.%s.yaml", ConfEnv)

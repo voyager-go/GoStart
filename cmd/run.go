@@ -9,6 +9,7 @@ import (
 	"go-start/internal/pkg/validator_trans"
 	"go-start/internal/router/middleware"
 	"go-start/internal/router/routes"
+	"os/exec"
 )
 
 var App = &cli.App{
@@ -41,6 +42,7 @@ var App = &cli.App{
 	Action: func(*cli.Context) error {
 		var (
 			srv = gin.New()
+			pm  = middleware.PublicMiddleware()
 			r   = new(response.R)
 		)
 		// 404 处理
@@ -48,9 +50,13 @@ var App = &cli.App{
 			r.RequestNotFound(ctx)
 		})
 		// 路由分组
-		normalGroup := srv.Group("/api", middleware.PublicMiddleware...)
+		normalGroup := srv.Group("/api", pm...)
 		// 用户组
 		routes.InitUserRoutes(normalGroup)
+		routes.InitDocRoutes(normalGroup)
+		// 生成swagger文档
+		cmd := exec.Command(config.Cfg.Cmd.SwagName, config.Cfg.Cmd.SwagArgs...)
+		_ = cmd.Run()
 		// 启动项目
 		return srv.Run(":" + config.AppPort)
 	},

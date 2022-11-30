@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	PublicMiddleware = []gin.HandlerFunc{
+func PublicMiddleware() []gin.HandlerFunc {
+	return []gin.HandlerFunc{
 		cors.Default(),
 		LoggerToFile(),
 	}
-)
+}
