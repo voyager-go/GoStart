@@ -1,10 +1,10 @@
 package log
 
 import (
-	"GoStart/config"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
+	"go-start/config"
 	"os"
 	"time"
 )

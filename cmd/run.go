@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"GoStart/config"
-	"GoStart/internal/pkg/log"
-	"GoStart/internal/pkg/response"
-	"GoStart/internal/pkg/validator_trans"
-	"GoStart/internal/router/middleware"
-	"GoStart/internal/router/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/urfave/cli/v2"
+	"go-start/config"
+	"go-start/internal/pkg/log"
+	"go-start/internal/pkg/response"
+	"go-start/internal/pkg/validator_trans"
+	"go-start/internal/router/middleware"
+	"go-start/internal/router/routes"
 )
 
 var App = &cli.App{

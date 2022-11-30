@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"GoStart/internal/controller"
 	"github.com/gin-gonic/gin"
+	"go-start/internal/controller"
 )
 
 func InitUserRoutes(r *gin.RouterGroup) (router gin.IRoutes) {

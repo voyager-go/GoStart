@@ -1,12 +1,12 @@
 package controller
 
 import (
-	v1 "GoStart/api/v1"
-	"GoStart/internal/consts/e"
-	"GoStart/internal/pkg/response"
-	"GoStart/internal/pkg/validator_trans"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	v1 "go-start/api/v1"
+	"go-start/internal/consts/e"
+	"go-start/internal/pkg/response"
+	"go-start/internal/pkg/validator_trans"
 )
 
 type cUser struct {
@@ -21,7 +21,7 @@ func (cUser) Show(ctx *gin.Context) {
 	r.SuccessWithData(ctx, struct {
 		UserName string
 	}{
-		UserName: "Hello GoStart",
+		UserName: "Hello go-start",
 	})
 }
 

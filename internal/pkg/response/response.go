@@ -1,9 +1,9 @@
 package response
 
 import (
-	"GoStart/internal/consts/e"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-start/internal/consts/e"
 	"net/http"
 )
 

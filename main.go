@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GoStart/cmd"
+	"go-start/cmd"
 	"log"
 	"os"
 )

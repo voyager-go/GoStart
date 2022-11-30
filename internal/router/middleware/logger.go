@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"GoStart/internal/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"go-start/internal/pkg/log"
 	"time"
 )
 
