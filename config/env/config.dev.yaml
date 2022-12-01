@@ -23,7 +23,7 @@ database:
   port: '3306'
   user: 'root'
   password: 'root'
-  dbname: 'go-start'
+  dbName: 'go_start'
 redis:
   host: '127.0.0.1'
   port: '6379'
@@ -31,5 +31,5 @@ redis:
   dbNum: 0
   loginPrefix: 'start_go_api_login_' # 登录用户存入redis键名的前缀
 cmd:
-  swagName: '~/go/bin/swag' # swagger 文档生成工具
-  swagArgs: ['init', '--output', '~/GolandProjects/go-start/assets/docs'] # swag init --output xxx 指定文档生成的文件夹
+  swagName: '/Users/artist/go/bin/swag' # swagger 文档生成工具
+  swagArgs: ['init', '--output', '/Users/artist/GolandProjects/go-start/assets/docs'] # swag init --output xxx 指定文档生成的文件夹

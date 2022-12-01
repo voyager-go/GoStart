@@ -31,6 +31,7 @@ func NewConfig() {
 		log.Fatalln(err)
 	}
 	err = yaml.Unmarshal(file, &Cfg)
+	fmt.Println(Cfg)
 	if err != nil {
 		log.Fatalln(err)
 	}
