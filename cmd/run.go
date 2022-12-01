@@ -5,7 +5,8 @@ import (
 	"github.com/urfave/cli/v2"
 	"go-start/config"
 	"go-start/internal/pkg/log"
-	"go-start/internal/pkg/response"
+	"go-start/internal/pkg/mysql"
+	"go-start/internal/pkg/res"
 	"go-start/internal/pkg/validator_trans"
 	"go-start/internal/router/middleware"
 	"go-start/internal/router/routes"
@@ -35,6 +36,8 @@ var App = &cli.App{
 		config.NewConfig()
 		// 初始化日志追踪
 		log.NewLogger()
+		// 初始化数据库连接
+		mysql.NewMysql()
 		// 初始化验证器翻译
 		validator_trans.NewTrans()
 		return nil
@@ -43,7 +46,7 @@ var App = &cli.App{
 		var (
 			srv = gin.New()
 			pm  = middleware.PublicMiddleware()
-			r   = new(response.R)
+			r   = new(res.R)
 		)
 		// 404 处理
 		srv.NoRoute(func(ctx *gin.Context) {
@@ -53,10 +56,13 @@ var App = &cli.App{
 		normalGroup := srv.Group("/api", pm...)
 		// 用户组
 		routes.InitUserRoutes(normalGroup)
+		// 文档组
 		routes.InitDocRoutes(normalGroup)
 		// 生成swagger文档
-		cmd := exec.Command(config.Cfg.Cmd.SwagName, config.Cfg.Cmd.SwagArgs...)
-		_ = cmd.Run()
+		if config.Cfg.Cmd.SwagName != "" {
+			cmd := exec.Command(config.Cfg.Cmd.SwagName, config.Cfg.Cmd.SwagArgs...)
+			_ = cmd.Run()
+		}
 		// 启动项目
 		return srv.Run(":" + config.AppPort)
 	},

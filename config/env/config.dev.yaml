@@ -17,7 +17,8 @@ log:
   debug: true
   fileName: 'go-start' # 日志文件名称
   dirPath: 'storage/logs/' # 日志默认存放目录
-mysql:
+database:
+  driver: 'mysql'
   host: '127.0.0.1'
   port: '3306'
   user: 'root'
@@ -30,5 +31,5 @@ redis:
   dbNum: 0
   loginPrefix: 'start_go_api_login_' # 登录用户存入redis键名的前缀
 cmd:
-  swagName: '/Users/artist/go/bin/swag'
-  swagArgs: ['init', '--output', '/Users/artist/GolandProjects/go-start/assets/docs']
+  swagName: '~/go/bin/swag' # swagger 文档生成工具
+  swagArgs: ['init', '--output', '~/GolandProjects/go-start/assets/docs'] # swag init --output xxx 指定文档生成的文件夹
