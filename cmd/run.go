@@ -58,7 +58,7 @@ var App = &cli.App{
 		routes.InitUserRoutes(normalGroup)
 		// 文档组
 		routes.InitDocRoutes(normalGroup)
-		// 生成swagger文档，无法捕捉生成失败日志，建议手动执行[swag init --output assets/docs]
+		// 生成swagger文档，生成失败时无法捕捉日志，建议手动执行[swag init --output assets/docs]
 		if config.Cfg.Cmd.SwagName != "" {
 			cmd := exec.Command(config.Cfg.Cmd.SwagName, config.Cfg.Cmd.SwagArgs...)
 			_ = cmd.Run()
