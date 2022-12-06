@@ -7,16 +7,21 @@ import (
 	"go-start/internal/pkg/mysql"
 	"go-start/internal/request"
 	"go-start/internal/response"
+	"go-start/internal/service"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"time"
+)
+
+var (
+	_ service.UserInfoService = (*UserRepository)(nil)
 )
 
 type UserRepository struct {
 	db *gorm.DB
 }
 
-func NewUserInfo() *UserRepository {
+func newUserInfoRepository() *UserRepository {
 	return &UserRepository{db: mysql.Conn}
 }
 

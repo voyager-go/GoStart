@@ -13,7 +13,8 @@ type cUser struct {
 }
 
 var (
-	User = cUser{}
+	User         = cUser{}
+	DataProvider = repository.NewDataProvider()
 )
 
 // Create
@@ -36,7 +37,7 @@ func (c cUser) Create(ctx *gin.Context) {
 		c.R.Fail(ctx, e.RequestParamsError, err.Error())
 		return
 	}
-	err = repository.NewUserInfo().Create(req)
+	err = DataProvider.UserInfoService.Create(req)
 	if err != nil {
 		c.R.Fail(ctx, e.Failed, err.Error())
 		return
@@ -64,6 +65,6 @@ func (c cUser) Show(ctx *gin.Context) {
 		return
 	}
 	fmt.Println(req)
-	res, err := repository.NewUserInfo().Show(req)
+	res, err := DataProvider.UserInfoService.Show(req)
 	c.R.SuccessWithData(ctx, res)
 }
