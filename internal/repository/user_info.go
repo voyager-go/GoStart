@@ -14,18 +14,18 @@ import (
 )
 
 var (
-	_ service.UserInfoService = (*UserRepository)(nil)
+	_ service.UserInfoService = (*userRepository)(nil)
 )
 
-type UserRepository struct {
+type userRepository struct {
 	db *gorm.DB
 }
 
-func newUserInfoRepository() *UserRepository {
-	return &UserRepository{db: mysql.Conn}
+func newUserInfoRepository() service.UserInfoService {
+	return &userRepository{db: mysql.Conn}
 }
 
-func (r *UserRepository) Show(req request.UserInfoShowReq) (res *response.UserInfoShowRes, err error) {
+func (r *userRepository) Show(req request.UserInfoShowReq) (res *response.UserInfoShowRes, err error) {
 	if req.Id == "" && req.Passport == "" {
 		err = errors.New("查询条件缺失")
 		return
@@ -41,11 +41,11 @@ func (r *UserRepository) Show(req request.UserInfoShowReq) (res *response.UserIn
 	return
 }
 
-func (r *UserRepository) List(req request.UserInfoListReq) *[]entity.UserInfo {
+func (r *userRepository) List(req request.UserInfoListReq) *[]entity.UserInfo {
 	return nil
 }
 
-func (r *UserRepository) Create(req request.UserInfoCreateReq) error {
+func (r *userRepository) Create(req request.UserInfoCreateReq) error {
 	var (
 		user entity.UserInfo
 		res  *response.UserInfoShowRes

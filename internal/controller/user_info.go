@@ -4,18 +4,13 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-start/internal/consts/e"
-	"go-start/internal/repository"
 	"go-start/internal/request"
 )
 
 type cUser struct {
-	Controller
 }
 
-var (
-	User         = cUser{}
-	DataProvider = repository.NewDataProvider()
-)
+var User = cUser{}
 
 // Create
 // @BasePath /api
@@ -32,17 +27,17 @@ func (c cUser) Create(ctx *gin.Context) {
 	var (
 		req request.UserInfoCreateReq
 	)
-	err := c.Validator(ctx, &req)
+	err := Validator(ctx, &req)
 	if err != nil {
-		c.R.Fail(ctx, e.RequestParamsError, err.Error())
+		R.Fail(ctx, e.RequestParamsError, err.Error())
 		return
 	}
 	err = DataProvider.UserInfoService.Create(req)
 	if err != nil {
-		c.R.Fail(ctx, e.Failed, err.Error())
+		R.Fail(ctx, e.Failed, err.Error())
 		return
 	}
-	c.R.Success(ctx)
+	R.Success(ctx)
 }
 
 // Show
@@ -59,12 +54,12 @@ func (c cUser) Show(ctx *gin.Context) {
 	var (
 		req request.UserInfoShowReq
 	)
-	err := c.Validator(ctx, &req)
+	err := Validator(ctx, &req)
 	if err != nil {
-		c.R.Fail(ctx, e.RequestParamsError, err.Error())
+		R.Fail(ctx, e.RequestParamsError, err.Error())
 		return
 	}
 	fmt.Println(req)
 	res, err := DataProvider.UserInfoService.Show(req)
-	c.R.SuccessWithData(ctx, res)
+	R.SuccessWithData(ctx, res)
 }

@@ -5,7 +5,7 @@ import (
 	"go-start/internal/controller"
 )
 
-func InitUserRoutes(r *gin.RouterGroup) (router gin.IRoutes) {
+func InitUserInfoRoutes(r *gin.RouterGroup) (router gin.IRoutes) {
 	userRoutes := r.Group("")
 	{
 		userRoutes.GET("/user/:id", controller.User.Show)
