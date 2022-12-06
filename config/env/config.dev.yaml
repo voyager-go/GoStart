@@ -3,9 +3,10 @@ server:
   port: '8080'
   defaultPageSize: 20 # 默认分页条数
   maxPageSize: 500    # 最大分页条数
+jwt:
   tokenExpire: 3600   # token过期时间
   tokenKey: 'Authorization' # token的键名
-  tokenIssuer: 'start-go-api'
+  tokenIssuer: 'go-start'
   jwtSecret: 'LIXLolf0ZJ8qalcwh5FQi5xrzjJQHLpy'
 redoc:
   title: "GoStart OpenApi"
@@ -29,7 +30,7 @@ redis:
   port: '6379'
   password: ''
   dbNum: 0
-  loginPrefix: 'start_go_api_login_' # 登录用户存入redis键名的前缀
+  loginPrefix: 'go_start_login_' # 登录用户存入redis键名的前缀
 cmd:
   swagName: '/Users/artist/go/bin/swag' # swagger 文档生成工具
   swagArgs: ['init', '--output', '/Users/artist/GolandProjects/go-start/assets/docs'] # swag init --output xxx 指定文档生成的文件夹

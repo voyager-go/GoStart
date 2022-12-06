@@ -19,6 +19,8 @@ type Conf struct {
 	Redoc    RedocConf    // 文档配置
 	Cmd      CmdConf      // 命令配置
 	DataBase DataBaseConf // 数据库配置
+	Jwt      JwtConf      // 令牌配置
+	Redis    RedisConf    // Redis配置
 }
 
 // NewConfig 初始化配置信息
