@@ -118,4 +118,6 @@ Temporary Items
 
 # Custom
 ./storage/logs/
-./tmp
+tmp/
+main
+.idea
