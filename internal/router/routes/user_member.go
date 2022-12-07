@@ -10,7 +10,7 @@ func InitUserMemberRoutes(r *gin.RouterGroup) (router gin.IRoutes) {
 	{
 		userRoutes.GET("/user-member/:id", controller.User.Show)
 		userRoutes.POST("/user-member/sign-in", controller.User.Create)
-		userRoutes.POST("/user-member/sign-up", controller.User.Create)
+		userRoutes.POST("/user-member/sign-up", controller.UserMember.SignUp)
 		userRoutes.POST("/user-member/sign-logout", controller.User.Create)
 	}
 	return userRoutes
