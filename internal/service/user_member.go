@@ -16,5 +16,5 @@ type UserMemberManageService interface {
 type UserMemberService interface {
 	Show(req request.UserMemberShowReq) (res *response.UserMemberShowRes, err error)
 	SignUp(req request.UserMemberSignUpReq) error
-	SignIn(req request.UserMemberSignInReq) string
+	SignIn(req request.UserMemberSignInReq) (token string, err error)
 }

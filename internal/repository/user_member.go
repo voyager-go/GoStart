@@ -1,15 +1,23 @@
 package repository
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"github.com/jinzhu/copier"
+	"go-start/config"
+	"go-start/internal/consts"
 	"go-start/internal/model/entity"
+	"go-start/internal/pkg/helper"
+	"go-start/internal/pkg/jwt"
 	"go-start/internal/pkg/mysql"
+	"go-start/internal/pkg/redis"
 	"go-start/internal/request"
 	"go-start/internal/response"
 	"go-start/internal/service"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"strconv"
 	"time"
 )
 
@@ -43,16 +51,18 @@ func (r *userMemberManageRepository) ChangeStatus(req request.UserMemberChangeSt
 }
 
 func (r *userMemberRepository) Show(req request.UserMemberShowReq) (res *response.UserMemberShowRes, err error) {
+	query := r.db.Model(&entity.UserMember{})
+	if req.UserMemberId != "" {
+		query.Where("id = ?", req.UserMemberId).First(&res)
+	}
 	return
 }
+
 func (r *userMemberRepository) SignUp(req request.UserMemberSignUpReq) error {
 	var (
 		um   entity.UserMember
 		user response.UserMemberShowRes
 	)
-	if req.Passport == "" {
-		return errors.New("查询条件缺失")
-	}
 	query := r.db.Model(&entity.UserMember{})
 	if req.Passport != "" {
 		query.Where("passport = ?", req.Passport).First(&user)
@@ -68,10 +78,39 @@ func (r *userMemberRepository) SignUp(req request.UserMemberSignUpReq) error {
 		return err
 	}
 	um.Password = string(by)
-	um.CreatedAt = time.Now()
-	return r.db.Create(&user).Error
+	um.CreatedAt = helper.FTime{Time: time.Now()}
+	return r.db.Create(&um).Error
 }
 
-func (r *userMemberRepository) SignIn(req request.UserMemberSignInReq) string {
-	return ""
+func (r *userMemberRepository) SignIn(req request.UserMemberSignInReq) (token string, err error) {
+	var (
+		user response.UserMemberShowRes
+		cfg  = config.Cfg.Jwt
+	)
+	query := r.db.Model(&entity.UserMember{})
+	if req.Passport != "" {
+		query.Where("passport = ?", req.Passport).First(&user)
+	}
+	if user.Id == "" {
+		return "", errors.New("账户不存在")
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+	if err != nil {
+		return "", errors.New("账户与密码不匹配")
+	}
+	if user.Status == strconv.Itoa(consts.UserMemberStatusForbidden) {
+		return "", errors.New("该账户已禁用")
+	}
+	token, err = jwt.Generate(cfg.JwtSecret, cfg.TokenExpire, user, cfg.TokenIssuer)
+	if err != nil {
+		return "", errors.New("令牌生成失败")
+	}
+	loginKey := config.Cfg.Redis.LoginPrefix + user.Id
+	bs, _ := json.Marshal(user)
+	_, err = redis.Client.Set(context.Background(), loginKey, string(bs), 3600*time.Second).Result()
+	if err != nil {
+		return "", errors.New("用户信息写入缓存失败")
+	}
+	err = r.db.Model(&entity.UserMember{}).Where("id = ?", user.Id).Update("last_login_ip", req.Ip).Error
+	return
 }

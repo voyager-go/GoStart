@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/jinzhu/copier"
 	"go-start/internal/model/entity"
+	"go-start/internal/pkg/helper"
 	"go-start/internal/pkg/mysql"
 	"go-start/internal/request"
 	"go-start/internal/response"
@@ -66,6 +67,6 @@ func (r *userRepository) Create(req request.UserInfoCreateReq) error {
 		return err
 	}
 	user.Password = string(by)
-	user.CreatedAt = time.Now()
+	user.CreatedAt = helper.FTime{Time: time.Now()}
 	return r.db.Create(&user).Error
 }

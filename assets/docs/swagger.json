@@ -39,6 +39,40 @@
                 }
             }
         },
+        "/user-member/sign-up": {
+            "post": {
+                "description": "填写基本信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "玩家信息"
+                ],
+                "summary": "注册",
+                "parameters": [
+                    {
+                        "description": "玩家信息",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserMemberSignUpReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/show/{id}": {
             "get": {
                 "description": "展示指定用户信息",
@@ -65,6 +99,24 @@
     },
     "definitions": {
         "request.UserInfoCreateReq": {
+            "type": "object",
+            "required": [
+                "passport",
+                "password"
+            ],
+            "properties": {
+                "nickname": {
+                    "type": "string"
+                },
+                "passport": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UserMemberSignUpReq": {
             "type": "object",
             "required": [
                 "passport",

@@ -11,16 +11,17 @@ type UserMemberSignUpReq struct {
 type UserMemberSignInReq struct {
 	Passport string `json:"passport" binding:"required,min=2,max=30"`
 	Password string `json:"password" binding:"required,min=6,max=20"`
+	Ip       string `json:"-"`
 }
 
 // UserMemberShowReq 玩家信息输入参数
 type UserMemberShowReq struct {
-	UserMemberId string `json:"user_member_id" binding:"required"`
+	UserMemberId string `json:"user_member_id" uri:"user_member_id" binding:"required,numeric"`
 }
 
 // UserMemberListReq 玩家列表输入参数
 type UserMemberListReq struct {
-	Passport string `json:"passport" binding:"omitempty,string"`
+	Passport string `json:"passport" binding:"omitempty"`
 	PageReq
 }
 
