@@ -1,7 +1,7 @@
 package config
 
 type JwtConf struct {
-	TokenExpire string `yaml:"tokenExpire"`
+	TokenExpire int64  `yaml:"tokenExpire"`
 	TokenKey    string `yaml:"tokenKey"`
 	TokenIssuer string `yaml:"tokenIssuer"`
 	JwtSecret   string `yaml:"jwtSecret"`

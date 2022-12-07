@@ -8,7 +8,6 @@ import (
 	"go-start/internal/model/entity"
 	"go-start/internal/pkg/jwt"
 	"go-start/internal/pkg/redis"
-	"strconv"
 )
 
 type LoginUser struct {
@@ -16,7 +15,7 @@ type LoginUser struct {
 }
 
 type TokenPayload struct {
-	UserId int64 `json:"id"`
+	UserId string `json:"id"`
 }
 
 var (
@@ -39,10 +38,10 @@ func ParseUserByToken(token string) (TokenPayload, error) {
 	if err != nil {
 		return user, err
 	}
-	if user.UserId == 0 {
+	if user.UserId == "" {
 		return user, errors.New(LoginInvalidErr)
 	}
-	loginKey := config.Cfg.Redis.LoginPrefix + strconv.FormatInt(user.UserId, 10)
+	loginKey := config.Cfg.Redis.LoginPrefix + user.UserId
 	_, err = redis.Client.Get(context.Background(), loginKey).Result()
 	if err != nil {
 		return TokenPayload{}, errors.New(TokenExpireErr)

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/urfave/cli/v2"
 	"go-start/config"
+	"go-start/internal/controller"
 	"go-start/internal/pkg/log"
 	"go-start/internal/pkg/mysql"
 	"go-start/internal/pkg/redis"
@@ -59,10 +60,14 @@ var App = &cli.App{
 		normalGroup := srv.Group("/api", pm...)
 		// 路由分组 - 授权路由
 		authGroup := srv.Group("/api", append(pm, middleware.Auth)...)
+		// 初始化控制层基础方法
+		controller.InitMethods()
 		// 用户组
 		routes.InitUserInfoRoutes(normalGroup)
 		// 文档组
 		routes.InitDocRoutes(normalGroup)
+		// 认证组
+		routes.InitAuthRoutes(normalGroup)
 		// 玩家组
 		routes.InitUserMemberRoutes(authGroup)
 		// 生成swagger文档，生成失败时无法捕捉日志，建议手动执行[swag init --output assets/docs]
