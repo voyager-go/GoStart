@@ -117,8 +117,10 @@ Temporary Items
 .apdisk
 
 # Custom
-./storage/logs/
+storage/*
 tmp/
 main
 .idea
 .air.toml
+dump.rdb
+web
