@@ -8,6 +8,7 @@ import (
 	"go-start/config"
 	"go-start/internal/consts"
 	"go-start/internal/model/entity"
+	"go-start/internal/model/enum"
 	"go-start/internal/pkg/helper"
 	"go-start/internal/pkg/jwt"
 	"go-start/internal/pkg/mysql"
@@ -43,11 +44,19 @@ func newUserMemberManageRepository() service.UserMemberManageService {
 }
 
 func (r *userMemberManageRepository) List(req request.UserMemberListReq) *[]entity.UserMember {
-	return nil
+	var list []entity.UserMember
+	query := r.db.Model(&entity.UserMember{})
+	if req.Passport != "" {
+		query.Where("passport LIKE ?", "%"+req.Passport+"%")
+	}
+	pageSize, _ := strconv.Atoi(req.PageSize)
+	query.Offset(helper.Offset(req.PageReq)).Limit(pageSize)
+	query.Scan(&list)
+	return &list
 }
 
 func (r *userMemberManageRepository) ChangeStatus(req request.UserMemberChangeStatusReq) error {
-	return nil
+	return r.db.Model(&entity.UserMember{}).Where("id = ?", req.UserMemberId).Update("status", req.ToStatus).Error
 }
 
 func (r *userMemberRepository) Show(req request.UserMemberShowReq) (res *response.UserMemberShowRes, err error) {
@@ -55,6 +64,8 @@ func (r *userMemberRepository) Show(req request.UserMemberShowReq) (res *respons
 	if req.UserMemberId != "" {
 		query.Where("id = ?", req.UserMemberId).First(&res)
 	}
+	res.StatusText = enum.UserMemberIfVerifyMap[res.Status]
+	res.IfVerifyText = enum.UserMemberIfVerifyMap[res.IfVerify]
 	return
 }
 
@@ -98,7 +109,7 @@ func (r *userMemberRepository) SignIn(req request.UserMemberSignInReq) (token st
 	if err != nil {
 		return "", errors.New("账户与密码不匹配")
 	}
-	if user.Status == strconv.Itoa(consts.UserMemberStatusForbidden) {
+	if user.Status == consts.UserMemberStatusForbidden {
 		return "", errors.New("该账户已禁用")
 	}
 	token, err = jwt.Generate(cfg.JwtSecret, cfg.TokenExpire, user, cfg.TokenIssuer)

@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"go-start/internal/consts/e"
-	"go-start/internal/pkg/log"
 	"go-start/internal/request"
 )
 
@@ -90,10 +89,26 @@ func (cUserMember) Show(ctx *gin.Context) {
 		return
 	}
 	res, err := DataProvider.UserMemberService.Show(req)
-	log.Logger.Infof("resdata %v", res)
 	if err != nil {
 		R.Fail(ctx, e.Failed, err.Error())
 		return
 	}
 	R.SuccessWithData(ctx, res)
 }
+
+//func (cUserMember) List(ctx *gin.Context) {
+//	var (
+//		req request.UserMemberListReq
+//	)
+//	err := Validator(ctx, &req)
+//	if err != nil {
+//		R.Fail(ctx, e.RequestParamsError, err.Error())
+//		return
+//	}
+//	res := DataProvider.UserMemberManageService.List(req)
+//	if err != nil {
+//		R.Fail(ctx, e.Failed, err.Error())
+//		return
+//	}
+//	R.SuccessWithData(ctx, res)
+//}

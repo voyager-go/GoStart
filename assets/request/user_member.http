@@ -1,0 +1,22 @@
+### 玩家注册
+POST http://127.0.0.1:8080/api/auth/sign-up
+Content-Type: application/json
+
+{
+  "nickname": "",
+  "passport": "vo",
+  "password": "123456"
+}
+
+### 玩家登录
+POST http://127.0.0.1:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "passport": "wenjie",
+  "password": "123456"
+}
+
+### 玩家信息获取
+GET http://127.0.0.1:8080/api/user-member/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNCIsInBhc3Nwb3J0Ijoid2VuamllIiwiZW1haWwiOiIiLCJzdGF0dXMiOiIxIiwic3RhdHVzX3RleHQiOiIiLCJpZl92ZXJpZnkiOiIyIiwiaWZfdmVyaWZ5X3RleHQiOiIiLCJuaWNrbmFtZSI6IiIsImNyZWF0ZWRfYXQiOiIyMDIyLTEyLTA3IDE2OjE2OjQ2IiwidXBkYXRlZF9hdCI6IjIwMjItMTItMDcgMTY6MTY6NDYifSwiZXhwIjoxNjcwNTA5Mjc1LCJpc3MiOiJnby1zdGFydCJ9.__dBslseIk26UnR0NM3Fh-GOb3GtZJjpo-lY547lDKY

@@ -3,6 +3,8 @@ package helper
 import (
 	"bytes"
 	"fmt"
+	"go-start/internal/request"
+	"strconv"
 	"time"
 )
 
@@ -19,4 +21,14 @@ func Map2Str(m map[string]string) string {
 func FormatTimestamp(currTime time.Time) string {
 	layout := "2006-01-02 15:04:05"
 	return currTime.Format(layout)
+}
+
+// Offset 分页偏移量计算
+func Offset(req request.PageReq) int {
+	currPage, _ := strconv.Atoi(req.CurrPage)
+	perPage, _ := strconv.Atoi(req.PageSize)
+	if currPage < 1 {
+		currPage = 1
+	}
+	return (currPage - 1) * perPage
 }
