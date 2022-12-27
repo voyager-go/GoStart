@@ -1,6 +1,6 @@
 package request
 
 type PageReq struct {
-	PageSize string `json:"page_size"` // 每页条目
-	CurrPage string `json:"curr_page"` // 当前页
+	PageSize int `json:"size" form:"size" uri:"size" binding:"required,numeric"` // 每页条目
+	CurrPage int `json:"page" form:"page" uri:"page" binding:"required,numeric"` // 当前页
 }

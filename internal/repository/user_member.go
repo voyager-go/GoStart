@@ -49,8 +49,7 @@ func (r *userMemberManageRepository) List(req request.UserMemberListReq) *[]enti
 	if req.Passport != "" {
 		query.Where("passport LIKE ?", "%"+req.Passport+"%")
 	}
-	pageSize, _ := strconv.Atoi(req.PageSize)
-	query.Offset(helper.Offset(req.PageReq)).Limit(pageSize)
+	query.Offset(helper.Offset(req.PageReq)).Limit(req.PageSize)
 	query.Scan(&list)
 	return &list
 }
@@ -59,14 +58,39 @@ func (r *userMemberManageRepository) ChangeStatus(req request.UserMemberChangeSt
 	return r.db.Model(&entity.UserMember{}).Where("id = ?", req.UserMemberId).Update("status", req.ToStatus).Error
 }
 
-func (r *userMemberRepository) Show(req request.UserMemberShowReq) (res *response.UserMemberShowRes, err error) {
+func (r *userMemberRepository) UpdateAvatar(id int64, avatar string) error {
 	query := r.db.Model(&entity.UserMember{})
-	if req.UserMemberId != "" {
-		query.Where("id = ?", req.UserMemberId).First(&res)
+	return query.Where("id = ?", id).Update("avatar", avatar).Error
+}
+
+func (r *userMemberRepository) Suggest(req request.UserMemberSuggestReq) (res response.UserMemberSuggestListRes, err error) {
+	query := r.db.Model(&entity.UserMember{})
+	err = query.Where("nickname LIKE ?", "%"+req.Nickname+"%").Scan(&res.List).Error
+	return
+}
+func (r *userMemberRepository) Show(id int64) (res *response.UserMemberShowRes, err error) {
+	query := r.db.Model(&entity.UserMember{})
+	query.Where("id = ?", id).First(&res)
+	if res.Id == 0 {
+		err = errors.New("未查询到指定玩家信息")
 	}
 	res.StatusText = enum.UserMemberIfVerifyMap[res.Status]
 	res.IfVerifyText = enum.UserMemberIfVerifyMap[res.IfVerify]
 	return
+}
+
+func (r *userMemberRepository) VerifyEmail(req request.UserMemberVerifyEmailReq) error {
+	updateMap := map[string]interface{}{"if_verify": consts.UserMemberIfVerifyTrue, "verify_code": "null"}
+	return r.db.Model(&entity.UserMember{}).Select([]string{"if_verify", "verify_code"}).Where("id = ? AND verify_code = ?", req.UserMemberId, req.Code).Updates(updateMap).Error
+}
+
+func (r *userMemberRepository) GetNotVerify() []entity.UserMember {
+	var result []entity.UserMember
+	err := r.db.Model(&entity.UserMember{}).Where("if_verify = ? AND verify_code IS NOT NULL", consts.UserMemberIfVerifyFalse).Scan(&result).Error
+	if err != nil {
+		return []entity.UserMember{}
+	}
+	return result
 }
 
 func (r *userMemberRepository) SignUp(req request.UserMemberSignUpReq) error {
@@ -78,7 +102,7 @@ func (r *userMemberRepository) SignUp(req request.UserMemberSignUpReq) error {
 	if req.Passport != "" {
 		query.Where("passport = ?", req.Passport).First(&user)
 	}
-	if user.Id != "" {
+	if user.Id != 0 {
 		return errors.New("passport 已存在")
 	}
 	if err := copier.Copy(&um, req); err != nil {
@@ -90,6 +114,7 @@ func (r *userMemberRepository) SignUp(req request.UserMemberSignUpReq) error {
 	}
 	um.Password = string(by)
 	um.CreatedAt = helper.FTime{Time: time.Now()}
+	um.VerifyCode, _ = helper.String(6, helper.Alphanumeric)
 	return r.db.Create(&um).Error
 }
 
@@ -102,7 +127,7 @@ func (r *userMemberRepository) SignIn(req request.UserMemberSignInReq) (token st
 	if req.Passport != "" {
 		query.Where("passport = ?", req.Passport).First(&user)
 	}
-	if user.Id == "" {
+	if user.Id == 0 {
 		return "", errors.New("账户不存在")
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
@@ -116,7 +141,7 @@ func (r *userMemberRepository) SignIn(req request.UserMemberSignInReq) (token st
 	if err != nil {
 		return "", errors.New("令牌生成失败")
 	}
-	loginKey := config.Cfg.Redis.LoginPrefix + user.Id
+	loginKey := config.Cfg.Redis.LoginPrefix + strconv.Itoa(int(user.Id))
 	bs, _ := json.Marshal(user)
 	_, err = redis.Client.Set(context.Background(), loginKey, string(bs), 3600*time.Second).Result()
 	if err != nil {

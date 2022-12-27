@@ -1,7 +1,7 @@
 package request
 
 type UserInfoShowReq struct {
-	Id       string `json:"id" binding:"omitempty"`
+	Id       int64  `json:"id" binding:"omitempty"`
 	Passport string `json:"passport" binding:"omitempty,min=2,max=30"`
 }
 

@@ -6,10 +6,20 @@ import (
 )
 
 func InitUserMemberRoutes(r *gin.RouterGroup) (router gin.IRoutes) {
-	userRoutes := r.Group("")
+	userRoutes := r.Group("/user-member")
 	{
-		userRoutes.GET("/user-member/:user_member_id", controller.UserMember.Show)
-		userRoutes.POST("/user-member/sign-logout", controller.UserMember.SignIn)
+		userRoutes.GET("/show", controller.UserMember.Show)
+		userRoutes.GET("/suggest", controller.UserMember.Suggest)
+		userRoutes.POST("/sign-logout", controller.UserMember.SignIn)
+		userRoutes.POST("/upload-avatar", controller.UserMember.UploadAvatar)
+	}
+	return userRoutes
+}
+
+func InitUserMemberPublicRoutes(r *gin.RouterGroup) (router gin.IRoutes) {
+	userRoutes := r.Group("/user-member")
+	{
+		userRoutes.GET("/verify-email", controller.UserMember.VerifyEmail)
 	}
 	return userRoutes
 }

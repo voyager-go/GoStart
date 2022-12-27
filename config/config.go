@@ -21,6 +21,7 @@ type Conf struct {
 	DataBase DataBaseConf // 数据库配置
 	Jwt      JwtConf      // 令牌配置
 	Redis    RedisConf    // Redis配置
+	Email    EMailConf    // 邮件服务
 }
 
 // NewConfig 初始化配置信息

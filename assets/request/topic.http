@@ -1,0 +1,25 @@
+### 玩家登录
+POST http://127.0.0.1:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "passport": "wenjie",
+  "password": "123456"
+}
+
+### 主题信息获取
+GET http://127.0.0.1:8080/api/topic/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNCIsInBhc3Nwb3J0Ijoid2VuamllIiwiZW1haWwiOiIiLCJzdGF0dXMiOiIxIiwic3RhdHVzX3RleHQiOiIiLCJpZl92ZXJpZnkiOiIyIiwiaWZfdmVyaWZ5X3RleHQiOiIiLCJuaWNrbmFtZSI6IiIsImNyZWF0ZWRfYXQiOiIyMDIyLTEyLTA3IDE2OjE2OjQ2IiwidXBkYXRlZF9hdCI6IjIwMjItMTItMDggMTI6MjE6MTUifSwiZXhwIjoxNjcwNTE5MTQ2LCJpc3MiOiJnby1zdGFydCJ9.SdIuxFhjxvF9Nfj7phIweR2S4I-MOTRmtgoz5iROWhw
+
+### 主题信息获取
+POST http://127.0.0.1:8080/api/topic/list
+Content-Type: application/json
+
+{
+  "title": "",
+  "order": "hot",
+  "page_info": {
+    "page_size":"10",
+    "curr_page":"1"
+  }
+}

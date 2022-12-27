@@ -14,7 +14,11 @@ type UserMemberManageService interface {
 
 // UserMemberService 玩家信息交互
 type UserMemberService interface {
-	Show(req request.UserMemberShowReq) (res *response.UserMemberShowRes, err error)
+	UpdateAvatar(id int64, avatar string) error
+	Show(id int64) (res *response.UserMemberShowRes, err error)
+	Suggest(req request.UserMemberSuggestReq) (res response.UserMemberSuggestListRes, err error)
 	SignUp(req request.UserMemberSignUpReq) error
 	SignIn(req request.UserMemberSignInReq) (token string, err error)
+	GetNotVerify() []entity.UserMember
+	VerifyEmail(req request.UserMemberVerifyEmailReq) error
 }

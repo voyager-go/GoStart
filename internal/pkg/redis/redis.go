@@ -5,14 +5,12 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"go-start/config"
-	"log"
 )
 
 var Client *redis.Client
 
 func NewRedis() {
 	cfg := config.Cfg.Redis
-	log.Default().Println(cfg)
 	Client = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
 		Password: cfg.Password,

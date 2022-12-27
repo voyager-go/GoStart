@@ -1,0 +1,53 @@
+### 玩家登录
+POST http://127.0.0.1:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "passport": "wenjie",
+  "password": "123456"
+}
+
+### 推文信息获取
+GET http://127.0.0.1:8080/api/post/123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNCIsInBhc3Nwb3J0Ijoid2VuamllIiwiZW1haWwiOiIiLCJzdGF0dXMiOiIxIiwic3RhdHVzX3RleHQiOiIiLCJpZl92ZXJpZnkiOiIyIiwiaWZfdmVyaWZ5X3RleHQiOiIiLCJuaWNrbmFtZSI6IiIsImNyZWF0ZWRfYXQiOiIyMDIyLTEyLTA3IDE2OjE2OjQ2IiwidXBkYXRlZF9hdCI6IjIwMjItMTItMDggMTU6MDU6NDYifSwiZXhwIjoxNjcwNTMwNDcyLCJpc3MiOiJnby1zdGFydCJ9.WQZ-nma6CCC9odvoPKymwxR5KV262fFOjzNYmN18zHo
+
+### 推文信息获取
+POST http://127.0.0.1:8080/api/post/list
+Content-Type: application/json
+
+{
+  "keywords": "",
+  "page_info": {
+    "page_size":"10",
+    "curr_page":"1"
+  }
+}
+
+### 推文发布
+POST http://127.0.0.1:8080/api/post/publish
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNCIsInBhc3Nwb3J0Ijoid2VuamllIiwiZW1haWwiOiIiLCJzdGF0dXMiOiIxIiwic3RhdHVzX3RleHQiOiIiLCJpZl92ZXJpZnkiOiIyIiwiaWZfdmVyaWZ5X3RleHQiOiIiLCJuaWNrbmFtZSI6IiIsImNyZWF0ZWRfYXQiOiIyMDIyLTEyLTA3IDE2OjE2OjQ2IiwidXBkYXRlZF9hdCI6IjIwMjItMTItMDkgMTE6MDE6MjIifSwiZXhwIjoxNjcwNTk0NTkwLCJpc3MiOiJnby1zdGFydCJ9.XrqYWNVD4oT3ek-n9IP-5_z7-DUpCwVIl6GAtQeKRRE
+Content-Type: application/json
+
+{
+  "content": "我来讲点东西"
+}
+
+### 推文点赞
+POST http://127.0.0.1:8080/api/post/star
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNCIsInBhc3Nwb3J0Ijoid2VuamllIiwiZW1haWwiOiIiLCJzdGF0dXMiOiIxIiwic3RhdHVzX3RleHQiOiIiLCJpZl92ZXJpZnkiOiIyIiwiaWZfdmVyaWZ5X3RleHQiOiIiLCJuaWNrbmFtZSI6IiIsImNyZWF0ZWRfYXQiOiIyMDIyLTEyLTA3IDE2OjE2OjQ2IiwidXBkYXRlZF9hdCI6IjIwMjItMTItMDkgMTE6MDE6MjIifSwiZXhwIjoxNjcwNTk0NTkwLCJpc3MiOiJnby1zdGFydCJ9.XrqYWNVD4oT3ek-n9IP-5_z7-DUpCwVIl6GAtQeKRRE
+Content-Type: application/json
+
+{
+  "uuid": "86ca88db-43e9-4562-8e54-8a0ed6c43a5f",
+  "operate": "sub"
+}
+
+### 推文收藏
+POST http://127.0.0.1:8080/api/post/collect
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNCIsInBhc3Nwb3J0Ijoid2VuamllIiwiZW1haWwiOiIiLCJzdGF0dXMiOiIxIiwic3RhdHVzX3RleHQiOiIiLCJpZl92ZXJpZnkiOiIyIiwiaWZfdmVyaWZ5X3RleHQiOiIiLCJuaWNrbmFtZSI6IiIsImNyZWF0ZWRfYXQiOiIyMDIyLTEyLTA3IDE2OjE2OjQ2IiwidXBkYXRlZF9hdCI6IjIwMjItMTItMDkgMTE6MDE6MjIifSwiZXhwIjoxNjcwNTk0NTkwLCJpc3MiOiJnby1zdGFydCJ9.XrqYWNVD4oT3ek-n9IP-5_z7-DUpCwVIl6GAtQeKRRE
+Content-Type: application/json
+
+{
+  "uuid": "86ca88db-43e9-4562-8e54-8a0ed6c43a5f",
+  "operate": "add"
+}

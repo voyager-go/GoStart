@@ -5,6 +5,8 @@ import (
 	"github.com/urfave/cli/v2"
 	"go-start/config"
 	"go-start/internal/controller"
+	"go-start/internal/crontab"
+	"go-start/internal/pkg/asynq_client"
 	"go-start/internal/pkg/log"
 	"go-start/internal/pkg/mysql"
 	"go-start/internal/pkg/redis"
@@ -44,14 +46,18 @@ var App = &cli.App{
 		redis.NewRedis()
 		// 初始化验证器翻译
 		validator_trans.NewTrans()
+		// 初始化异步任务队列
+		asynq_client.NewAsynq()
 		return nil
 	},
 	Action: func(*cli.Context) error {
 		var (
 			srv = gin.New()
 			pm  = middleware.PublicMiddleware()
+			ap  = middleware.AllowPreCheck()
 			r   = new(res.R)
 		)
+		srv.Use(ap)
 		// 404 处理
 		srv.NoRoute(func(ctx *gin.Context) {
 			r.RequestNotFound(ctx)
@@ -70,6 +76,20 @@ var App = &cli.App{
 		routes.InitAuthRoutes(normalGroup)
 		// 玩家组
 		routes.InitUserMemberRoutes(authGroup)
+		// 玩家开放组
+		routes.InitUserMemberPublicRoutes(normalGroup)
+		// 主题开放组
+		routes.InitTopicPublicRoutes(normalGroup)
+		// 主题认证组
+		routes.InitTopicRoutes(authGroup)
+		// 推文开放组
+		routes.InitPostPublicRoutes(normalGroup)
+		// 静态文件组
+		routes.InitStaticRoutes(normalGroup)
+		// 推文认证组
+		routes.InitPostRoutes(authGroup)
+		// 开启定时任务
+		crontab.Start()
 		// 生成swagger文档，生成失败时无法捕捉日志，建议手动执行[swag init --output assets/docs]
 		if config.Cfg.Cmd.SwagName != "" {
 			cmd := exec.Command(config.Cfg.Cmd.SwagName, config.Cfg.Cmd.SwagArgs...)

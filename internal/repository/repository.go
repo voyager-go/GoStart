@@ -6,6 +6,9 @@ type DataService struct {
 	service.UserInfoService
 	service.UserMemberService
 	service.UserMemberManageService
+	service.TopicService
+	service.PostService
+	service.PostManageService
 }
 
 func NewDataProvider() *DataService {
@@ -13,5 +16,8 @@ func NewDataProvider() *DataService {
 		UserInfoService:         newUserInfoRepository(),
 		UserMemberService:       newUserMemberRepository(),
 		UserMemberManageService: newUserMemberManageRepository(),
+		TopicService:            newTopicRepository(),
+		PostService:             newPostRepository(),
+		PostManageService:       newPostManageRepository(),
 	}
 }

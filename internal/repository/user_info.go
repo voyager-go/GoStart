@@ -27,12 +27,12 @@ func newUserInfoRepository() service.UserInfoService {
 }
 
 func (r *userRepository) Show(req request.UserInfoShowReq) (res *response.UserInfoShowRes, err error) {
-	if req.Id == "" && req.Passport == "" {
+	if req.Id == 0 && req.Passport == "" {
 		err = errors.New("查询条件缺失")
 		return
 	}
 	query := r.db.Model(&entity.UserInfo{})
-	if req.Id != "" {
+	if req.Id > 0 {
 		query.First(&res, req.Id)
 		return
 	}
@@ -56,7 +56,7 @@ func (r *userRepository) Create(req request.UserInfoCreateReq) error {
 	if err != nil {
 		return err
 	}
-	if res.Id != "" {
+	if res.Id > 0 {
 		return errors.New("passport 已存在")
 	}
 	if err := copier.Copy(&user, req); err != nil {

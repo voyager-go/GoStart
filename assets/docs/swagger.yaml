@@ -1,4 +1,80 @@
 definitions:
+  request.PostCollectReq:
+    properties:
+      operate:
+        description: add 是收藏 sub是取消收藏
+        type: string
+      uuid:
+        description: 推文编号
+        type: string
+    required:
+    - operate
+    - uuid
+    type: object
+  request.PostCommentCreateReq:
+    properties:
+      content:
+        description: 评论内容
+        type: string
+      pid:
+        description: 上层用户ID，如果是0，表示评论的是帖子
+        type: integer
+      uuid:
+        description: 帖子唯一标识
+        type: string
+    required:
+    - content
+    - pid
+    - uuid
+    type: object
+  request.PostPublishReq:
+    properties:
+      content:
+        description: 内容
+        type: string
+      if_top:
+        description: 是否置顶 1-是 2-否
+        type: string
+      published_city:
+        description: 发布城市
+        type: string
+      published_ip:
+        description: 发布Ip
+        type: string
+      user_member_id:
+        description: 创建人
+        type: integer
+    required:
+    - content
+    type: object
+  request.PostStarReq:
+    properties:
+      operate:
+        description: add 是点赞 sub是取消点赞
+        type: string
+      uuid:
+        description: 推文编号
+        type: string
+    required:
+    - operate
+    - uuid
+    type: object
+  request.TopicListReq:
+    properties:
+      order:
+        type: string
+      page:
+        description: 当前页
+        type: integer
+      size:
+        description: 每页条目
+        type: integer
+      title:
+        type: string
+    required:
+    - page
+    - size
+    type: object
   request.UserInfoCreateReq:
     properties:
       nickname:
@@ -11,10 +87,8 @@ definitions:
     - passport
     - password
     type: object
-  request.UserMemberSignUpReq:
+  request.UserMemberSignInReq:
     properties:
-      nickname:
-        type: string
       passport:
         type: string
       password:
@@ -23,12 +97,27 @@ definitions:
     - passport
     - password
     type: object
+  request.UserMemberSignUpReq:
+    properties:
+      email:
+        type: string
+      nickname:
+        type: string
+      passport:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - passport
+    - password
+    type: object
   response.UserInfoShowRes:
     properties:
       created_at:
         type: string
       id:
-        type: string
+        type: integer
       nickname:
         type: string
       passport:
@@ -40,6 +129,203 @@ info:
   contact: {}
   license: {}
 paths:
+  /post/collect:
+    post:
+      consumes:
+      - application/json
+      description: 收藏推文
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 推文编号
+        in: body
+        name: uuid
+        required: true
+        schema:
+          $ref: '#/definitions/request.PostCollectReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 收藏
+      tags:
+      - 推文
+  /post/comment-list:
+    get:
+      consumes:
+      - application/json
+      description: 查询推文的评论列表
+      parameters:
+      - description: 评论列表输入参数
+        in: query
+        name: list
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询评论
+      tags:
+      - 推文
+  /post/list:
+    get:
+      consumes:
+      - application/json
+      description: 查询主题信息
+      parameters:
+      - description: 列表输入参数
+        in: query
+        name: list
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询
+      tags:
+      - 推文
+  /post/publish:
+    post:
+      consumes:
+      - application/json
+      description: 发布一条推文
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 推文信息
+        in: body
+        name: publish_info
+        required: true
+        schema:
+          $ref: '#/definitions/request.PostPublishReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 发布
+      tags:
+      - 推文
+  /post/show:
+    get:
+      consumes:
+      - application/json
+      description: 查询主题信息
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 推文uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询
+      tags:
+      - 主题
+  /post/star:
+    post:
+      consumes:
+      - application/json
+      description: 给推文点赞
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 推文编号
+        in: body
+        name: uuid
+        required: true
+        schema:
+          $ref: '#/definitions/request.PostStarReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 点赞
+      tags:
+      - 推文
+  /topic/{topic_id}:
+    get:
+      consumes:
+      - application/json
+      description: 查询主题信息
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 主题编号
+        in: query
+        name: topic_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询
+      tags:
+      - 主题
+  /topic/list:
+    post:
+      consumes:
+      - application/json
+      description: 查询主题信息
+      parameters:
+      - description: 列表输入参数
+        in: body
+        name: list
+        required: true
+        schema:
+          $ref: '#/definitions/request.TopicListReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询
+      tags:
+      - 主题
   /user:
     post:
       consumes:
@@ -62,6 +348,43 @@ paths:
       summary: 创建用户
       tags:
       - 用户管理
+  /user-member/show:
+    get:
+      consumes:
+      - application/json
+      description: 填写基本信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询
+      tags:
+      - 玩家信息
+  /user-member/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: 填写登录信息
+      parameters:
+      - description: 登录信息
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserMemberSignInReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 登录
+      tags:
+      - 玩家信息
   /user-member/sign-up:
     post:
       consumes:
@@ -82,6 +405,21 @@ paths:
           schema:
             type: string
       summary: 注册
+      tags:
+      - 玩家信息
+  /user-member/suggest:
+    get:
+      consumes:
+      - application/json
+      description: 填写基本信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 根据用户名联想的玩家
       tags:
       - 玩家信息
   /user/show/{id}:
